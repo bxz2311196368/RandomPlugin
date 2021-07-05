@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.7.11",
+  "package": "com.bxzmod.randomplugin.mixin.mixinhandler",
+  "refmap": "mixins.randomplugin.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinBlock",
+    "MixinC00PacketLoginStart",
+    "MixinItemInWorldManager"
+  ],
+  "client": [
+  ],
+  "server": [
+    "MixinServerBlock"
+  ]
+}

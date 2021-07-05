@@ -1,0 +1,20 @@
+[
+  {
+    "modid": "randomplugin",
+    "name": "Random Plugin",
+    "description": "bxzmod.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "BXZ"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": [
+      "required-after:Baubles"
+    ]
+  }
+]
