@@ -5,6 +5,7 @@ import com.bxzmod.randomplugin.utils.Helper;
 import com.bxzmod.randomplugin.utils.LargeItemStack;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
@@ -13,6 +14,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,6 +73,42 @@ public class MaterialOrbHolder implements IMaterialOrbHolder
 			itemStack.stackSize = 0;
 	}
 
+	@Override
+	public void insertToInventory(ItemStack holderItem, IInventory inventory)
+	{
+		Iterator<LargeItemStack> iterator = this.itemStacks.iterator();
+		while (iterator.hasNext())
+		{
+			LargeItemStack largeItemStack = iterator.next();
+			boolean inserted = false;
+			ItemStack stack_base = largeItemStack.getStack().copy();
+			for (int i = 0; i < inventory.getSizeInventory(); i++)
+			{
+				if (inventory.getStackInSlot(i) == null)
+				{
+					inserted = true;
+					if (inventory.isItemValidForSlot(i, stack_base))
+					{
+						ItemStack temp = stack_base.copy();
+						temp.stackSize = largeItemStack.decreaseAmount(Math.min(64, largeItemStack.getAmount()));
+						inventory.setInventorySlotContents(i, temp);
+						inventory.markDirty();
+					}
+					if (largeItemStack.getAmount() <= 0)
+					{
+						iterator.remove();
+						break;
+					}
+				}
+			}
+			if (!inserted)
+				break;
+		}
+		this.reSyncNBT(holderItem);
+		if (this.itemStacks.isEmpty())
+			holderItem.stackSize = 0;
+	}
+
 	@Nonnull
 	@Override
 	public List getTooltip(ItemStack stack)
@@ -83,6 +121,12 @@ public class MaterialOrbHolder implements IMaterialOrbHolder
 		for (LargeItemStack largeItemStack : this.itemStacks)
 			toolTip.add(largeItemStack.getStack().getDisplayName() + ":" + largeItemStack.getAmount());
 		return toolTip;
+	}
+
+	@Override
+	public List<LargeItemStack> getStacks()
+	{
+		return this.itemStacks;
 	}
 
 	@Override
@@ -100,14 +144,21 @@ public class MaterialOrbHolder implements IMaterialOrbHolder
 		NBTTagIntArray nbtTagIntArray = new NBTTagIntArray(counts);
 		nbtTagCompound.setTag("Item", nbtTagListItem);
 		nbtTagCompound.setTag("Count", nbtTagIntArray);
-		return nbtTagCompound;
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setTag("material_orb", nbtTagCompound);
+		return nbt;
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound nbt)
+	public void deserializeNBT(NBTTagCompound nbtTagCompound)
 	{
-		if (nbt == null)
+		if (nbtTagCompound == null)
 			return;
+		if (nbtTagCompound.hasNoTags())
+			return;
+		if (!nbtTagCompound.hasKey("material_orb"))
+			return;
+		NBTTagCompound nbt = nbtTagCompound.getCompoundTag("material_orb");
 		NBTTagList nbtTagListItem = (NBTTagList) nbt.getTag("Item");
 		NBTTagIntArray nbtTagIntArray = (NBTTagIntArray) nbt.getTag("Count");
 		int[] counts = nbtTagIntArray.func_150302_c();

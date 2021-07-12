@@ -1,6 +1,7 @@
 package com.bxzmod.randomplugin.utils;
 
 import com.bxzmod.randomplugin.config.ChainMineConfig;
+import com.bxzmod.randomplugin.events.ChromaticCraftDropHandler;
 import com.bxzmod.randomplugin.mixin.mixininterface.IMixinBlock;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -49,10 +50,14 @@ public class SimulatePlayer
 		this.forceBreak = forceBreak;
 		this.damageItem = damageItem;
 		this.limitXPDrop = limitXPDrop;
+
 	}
 
 	public int startListMining(ArrayDeque<Point3i> blockList)
 	{
+		if (blockList.isEmpty())
+			return 0;
+		ChromaticCraftDropHandler.addPlayer(player.getGameProfile().getId(), blockList);
 		int exp = 0;
 		while (!blockList.isEmpty())
 		{
@@ -67,6 +72,7 @@ public class SimulatePlayer
 			if (temp > 0)
 				exp += temp;
 		}
+		this.itemStackList.addAll(ChromaticCraftDropHandler.getDrops(player.getGameProfile().getId()));
 		return exp;
 	}
 

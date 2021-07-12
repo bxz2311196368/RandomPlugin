@@ -1,16 +1,10 @@
 package com.bxzmod.randomplugin.utils;
 
-import Reika.ChromatiCraft.Auxiliary.RecipeManagers.CastingRecipe;
-import Reika.ChromatiCraft.Auxiliary.RecipeManagers.RecipesCastingTable;
-import Reika.ChromatiCraft.Base.DimensionStructureGenerator;
-import Reika.ChromatiCraft.Magic.Progression.ProgressStage;
-import Reika.ChromatiCraft.Magic.Progression.ProgressionManager;
-import Reika.ChromatiCraft.Registry.CrystalElement;
 import com.bxzmod.randomplugin.item.ItemLoader;
 import com.mojang.util.UUIDTypeAdapter;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,13 +12,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.vecmath.Point3i;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -172,46 +166,20 @@ public class Helper
 			return ForgeHooks.canToolHarvestBlock(block, world.getBlockMetadata(x, y, z), tool);
 	}
 
-	public static void syncPlayerChromaticCraft(EntityPlayer from, EntityPlayer to)
+	public static EnumFacing getEntityHorizontalFacing(Entity entity)
 	{
-		if (Loader.isModLoaded("ChromatiCraft"))
+		int face = MathHelper.floor_double((double) (entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		switch (face)
 		{
-			Collection<ProgressStage> stages_from = ProgressionManager.instance.getStagesFor(from);
-			Collection<ProgressStage> stages_to = ProgressionManager.instance.getStagesFor(to);
-			if (!stages_from.isEmpty())
-			{
-				for (ProgressStage s : stages_from)
-				{
-					if (stages_to.contains(s))
-						continue;
-					ProgressionManager.instance.setPlayerStage(to, s, true, true, false);
-				}
-			}
-
-			Collection<CrystalElement> colors_from = ProgressionManager.instance.getColorsFor(from);
-			Collection<CrystalElement> colors_to = ProgressionManager.instance.getColorsFor(to);
-			if (!colors_from.isEmpty())
-			{
-				for (CrystalElement e : colors_from)
-				{
-					if (colors_to.contains(e))
-						continue;
-					ProgressionManager.instance.setPlayerDiscoveredColor(to, e, true, true);
-					ProgressionManager.instance
-							.markPlayerCompletedStructureColor(to, (DimensionStructureGenerator) null, e, true, true);
-				}
-			}
-
-			for (int i = 0; i < CastingRecipe.RecipeType.typeList.length; ++i)
-			{
-				CastingRecipe.RecipeType r = CastingRecipe.RecipeType.typeList[i];
-				if (RecipesCastingTable.playerHasCrafted(from, r))
-				{
-					if (RecipesCastingTable.playerHasCrafted(to, r))
-						continue;
-					RecipesCastingTable.setPlayerHasCrafted(to, r);
-				}
-			}
+			case 0:
+				return EnumFacing.SOUTH;
+			case 1:
+				return EnumFacing.WEST;
+			case 3:
+				return EnumFacing.EAST;
+			case 2:
+			default:
+				return EnumFacing.NORTH;
 		}
 	}
 }

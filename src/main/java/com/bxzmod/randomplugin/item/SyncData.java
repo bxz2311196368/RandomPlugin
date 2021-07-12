@@ -2,6 +2,7 @@ package com.bxzmod.randomplugin.item;
 
 import com.bxzmod.randomplugin.Info;
 import com.bxzmod.randomplugin.creativetabs.CreativeTabsLoader;
+import com.bxzmod.randomplugin.utils.ChromaticCraftCompatible;
 import com.bxzmod.randomplugin.utils.Helper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +36,6 @@ public class SyncData extends Item
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player)
 	{
-		//TODO
 		if (!itemStack.hasTagCompound())
 		{
 			this.addPlayerInfo(itemStack, player);
@@ -50,9 +50,11 @@ public class SyncData extends Item
 				if (!world.isRemote)
 				{
 					EntityPlayer from = Helper.findPlayerByUUID(compound.getString("UUID"));
+					if (from == null)
+						return itemStack;
 					if (!from.getGameProfile().getId().equals(player.getGameProfile().getId()))
 
-						Helper.syncPlayerChromaticCraft(from, player);
+						ChromaticCraftCompatible.syncPlayerChromaticCraft(from, player);
 				}
 			}
 		}

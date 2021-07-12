@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(Block.class)
 public abstract class MixinBlock implements IMixinBlock
 {
+	@Shadow
+	protected float blockHardness;
 
 	@Shadow
 	protected abstract ItemStack createStackedBlock(int p_149644_1_);
@@ -16,5 +18,10 @@ public abstract class MixinBlock implements IMixinBlock
 	public ItemStack getSilkTouchDrop(int meta)
 	{
 		return this.createStackedBlock(meta);
+	}
+
+	public float getHardness()
+	{
+		return this.blockHardness;
 	}
 }

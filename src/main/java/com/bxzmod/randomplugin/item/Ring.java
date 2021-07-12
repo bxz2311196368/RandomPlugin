@@ -4,6 +4,7 @@ import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import com.bxzmod.randomplugin.Info;
 import com.bxzmod.randomplugin.creativetabs.CreativeTabsLoader;
+import com.bxzmod.randomplugin.mixin.mixinhandler.IMixinPotion;
 import com.bxzmod.randomplugin.utils.ModPlayerData;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -14,6 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Ring extends Item implements IBauble
 {
@@ -89,6 +93,7 @@ public class Ring extends Item implements IBauble
 			ModPlayerData.addRingMark((EntityPlayer) e);
 			ModPlayerData.ModPlayerClientData.ringMark = true;
 		}
+		this.removeBadEffect(player);
 
 	}
 
@@ -102,6 +107,32 @@ public class Ring extends Item implements IBauble
 		player.addPotionEffect(new PotionEffect(Potion.fireResistance.getId(), 1200, 0, true));
 		player.addPotionEffect(new PotionEffect(Potion.waterBreathing.getId(), 1200, 0, true));
 		player.addPotionEffect(new PotionEffect(Potion.field_76443_y.getId(), 1200, 0, true));
+	}
+
+	private void removeBadEffect(EntityPlayer player)
+	{
+		Collection<PotionEffect> effects = player.getActivePotionEffects();
+		// LOGGER.info(effects.size());
+		if (effects.size() > 0)
+		{
+			ArrayList<PotionEffect> bad = new ArrayList<PotionEffect>();
+			for (Object effect : effects)
+			{
+				if (effect instanceof PotionEffect)
+				{
+					PotionEffect potion = (PotionEffect) effect;
+					if (((IMixinPotion) Potion.potionTypes[potion.getPotionID()]).getBadEffect())
+						bad.add(potion);
+				}
+			}
+			if (bad.size() > 0)
+			{
+				for (PotionEffect potion : bad)
+				{
+					player.removePotionEffect(potion.getPotionID());
+				}
+			}
+		}
 	}
 
 	public static boolean hasWorn(EntityPlayer player)

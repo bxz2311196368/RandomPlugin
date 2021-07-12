@@ -6,6 +6,7 @@ itemGroup.randomplugin=Random Plugin
 item.ring.name=ring
 item.material_orb.name=Material Orb
 item.sync_data.name=Sync
+item.limitless_tool.name=Limitless Tool
 
 #config
 config.gui.randomplugin.title=Random Plugin Config

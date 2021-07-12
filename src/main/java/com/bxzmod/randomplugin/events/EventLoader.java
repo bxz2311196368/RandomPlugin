@@ -13,6 +13,7 @@ public class EventLoader
 		FMLCommonHandler.instance().bus().register(ServerEventHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ConfigEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ServerEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ChromaticCraftDropHandler.INSTANCE);
 		if (FMLCommonHandler.instance().getSide().isClient())
 		{
 			MinecraftForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);

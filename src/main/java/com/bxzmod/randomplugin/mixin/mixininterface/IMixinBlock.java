@@ -5,4 +5,6 @@ import net.minecraft.item.ItemStack;
 public interface IMixinBlock
 {
 	ItemStack getSilkTouchDrop(int meta);
+
+	float getHardness();
 }

@@ -6,6 +6,7 @@ itemGroup.randomplugin=随意事物
 item.ring.name=指环
 item.material_orb.name=物质球
 item.sync_data.name=同步器
+item.limitless_tool.name=多功能工具
 
 #配置
 config.gui.randomplugin.title=随意事物配置

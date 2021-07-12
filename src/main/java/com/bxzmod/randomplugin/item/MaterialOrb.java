@@ -5,8 +5,10 @@ import com.bxzmod.randomplugin.capability.MaterialOrbHolder;
 import com.bxzmod.randomplugin.capability.capabilityinterface.IMaterialOrbHolder;
 import com.bxzmod.randomplugin.creativetabs.CreativeTabsLoader;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -27,6 +29,15 @@ public class MaterialOrb extends Item
 	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int posX, int posY, int posZ,
 			int facing, float hitX, float hitY, float hitZ)
 	{
+		TileEntity te = world.getTileEntity(posX, posY, posZ);
+		if (te instanceof IInventory)
+		{
+			if (world.isRemote)
+				return true;
+			IMaterialOrbHolder holder = MaterialOrbHolder.fromNBT(itemStack);
+			holder.insertToInventory(itemStack, (IInventory) te);
+			return true;
+		}
 		this.onItemRightClick(itemStack, world, player);
 		return false;
 	}

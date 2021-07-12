@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
@@ -33,10 +34,9 @@ public class TPACommand extends ModCommandBase
 			{
 				MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 				ArrayList<String> namelist = Lists.newArrayList(server.getAllUsernames());
-				if (namelist.contains(sender.getCommandSenderName()))
+				if (namelist.contains(args[0]))
 				{
-					EntityPlayerMP target =
-							server.getConfigurationManager().func_152612_a(sender.getCommandSenderName());
+					EntityPlayerMP target = server.getConfigurationManager().func_152612_a(args[0]);
 					if (target == null)
 						return;
 					TeleportManager
@@ -44,6 +44,14 @@ public class TPACommand extends ModCommandBase
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean canCommandSenderUseCommand(ICommandSender sender)
+	{
+		if (sender instanceof EntityPlayer)
+			return true;
+		return super.canCommandSenderUseCommand(sender);
 	}
 
 	@Override

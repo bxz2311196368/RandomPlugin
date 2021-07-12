@@ -20,6 +20,7 @@ public class ModPlayerData
 	 * 存储玩家数据
 	 */
 	private static final HashMap<UUID, ModPlayerServerData> PLAYER_DATA = Maps.newHashMap();
+	private static final ModPlayerServerData EMPTY_DATA = new ModPlayerServerData();
 
 	public static void initPlayerFlag(UUID uuid)
 	{
@@ -38,6 +39,8 @@ public class ModPlayerData
 
 	public static ModPlayerServerData getDataByUUID(UUID uuid)
 	{
+		if (!PLAYER_DATA.containsKey(uuid))
+			return EMPTY_DATA;
 		return PLAYER_DATA.get(uuid);
 	}
 

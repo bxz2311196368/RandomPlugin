@@ -6,9 +6,13 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "IMixinPotion",
     "MixinBlock",
     "MixinC00PacketLoginStart",
-    "MixinItemInWorldManager"
+    "MixinEntityTracker",
+    "MixinItemBucket",
+    "MixinItemInWorldManager",
+    "MixinMinecraftServer"
   ],
   "client": [
   ],

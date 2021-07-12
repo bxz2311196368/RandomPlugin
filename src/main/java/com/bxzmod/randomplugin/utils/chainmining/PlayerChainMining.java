@@ -8,8 +8,10 @@ import com.bxzmod.randomplugin.utils.*;
 import com.bxzmod.randomplugin.utils.modinterface.IMiningControl;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -69,9 +71,10 @@ public class PlayerChainMining implements IMiningControl
 			boolean faceOffset = ModPlayerData.getDataByPlayer(this.player).isChainMineFaceOffset();
 			int offsetX = faceOffset ? -facing.getFrontOffsetX() : 0, offsetY =
 					faceOffset ? -facing.getFrontOffsetY() : 0, offsetZ = faceOffset ? -facing.getFrontOffsetZ() : 0;
+			int yLimit = this.blockPos.y;
 			while (ChainMiningManager.canChainMiningContinue(this.uuid))
 			{
-				this.findTargetBlock(facing, offsetX, offsetY, offsetZ);
+				this.findTargetBlock(facing, offsetX, offsetY, offsetZ, yLimit);
 				if (!this.harvestBlockList.isEmpty())
 					MiningTickEventHandler.addTask(new MiningTask(this, harvest, this.uuid, this.harvestBlockList));
 				else
@@ -102,9 +105,10 @@ public class PlayerChainMining implements IMiningControl
 		ChainMiningManager.stopPlayerMining(this.player);
 	}
 
-	private void findTargetBlock(EnumFacing facing, int offsetX, int offsetY, int offsetZ)
+	private void findTargetBlock(EnumFacing facing, int offsetX, int offsetY, int offsetZ, int yLimit)
 	{
 		int checkCount = 0;
+		boolean limitY = facing.getFrontOffsetY() == 0;
 		while (this.miningDone && checkCount < ChainMineConfig.MAX_PER_TICK)
 		{
 			if (this.next_blocks.isEmpty() || this.totalBlockCount >= ChainMineConfig.MAX_VALUE)
@@ -115,6 +119,8 @@ public class PlayerChainMining implements IMiningControl
 				for (int y = -1 + offsetY; y < 2 + offsetY; y++)
 				{
 					if (next.y + y < 0 || next.y + y >= 255)
+						continue;
+					if (limitY && next.y < yLimit)
 						continue;
 					for (int z = -1 + offsetZ; z < 2 + offsetZ; z++)
 					{
@@ -163,6 +169,8 @@ public class PlayerChainMining implements IMiningControl
 	private ItemStack getPickBlock(World world, int x, int y, int z, Block block)
 	{
 		Item item = Item.getItemFromBlock(block);
+		if (block instanceof BlockRedstoneOre)
+			item = Item.getItemFromBlock(Blocks.redstone_ore);
 		return new ItemStack(item, 1, block.getDamageValue(world, x, y, z));
 	}
 

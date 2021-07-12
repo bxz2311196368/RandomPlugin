@@ -25,9 +25,15 @@ public class MiningTask implements Runnable
 	@Override
 	public void run()
 	{
-		int exp = this.harvest.startListMining(this.blockList);
-		if (exp > 0)
-			ChainMiningManager.addPlayerMiningXP(this.uuid, exp);
+		try
+		{
+			int exp = this.harvest.startListMining(this.blockList);
+			if (exp > 0)
+				ChainMiningManager.addPlayerMiningXP(this.uuid, exp);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		this.control.updateMiningResult(true);
 	}
 }
