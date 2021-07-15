@@ -12,7 +12,7 @@ public class CommandLoader
 		event.registerServerCommand(new TPACommand());
 		event.registerServerCommand(new TPDCommand());
 		if (ModLoadFlags.CHC)
-			event.registerServerCommand(new ChromaticraftTuning());
+			event.registerServerCommand(new ChromatiCraftTuning());
 	}
 
 }

@@ -9,24 +9,20 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class UniversalTool extends ItemTool
 {
@@ -65,32 +61,13 @@ public class UniversalTool extends ItemTool
 	@Override
 	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity)
 	{
-		if (entity.worldObj.isRemote)
-		{
-			return false;
-		}
-		if (entity instanceof IShearable)
-		{
-			IShearable target = (IShearable) entity;
-			if (target.isShearable(itemstack, entity.worldObj, (int) entity.posX, (int) entity.posY, (int) entity.posZ))
-			{
-				ArrayList<ItemStack> drops =
-						target.onSheared(itemstack, entity.worldObj, (int) entity.posX, (int) entity.posY,
-								(int) entity.posZ,
-								EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, itemstack));
+		return Items.shears.itemInteractionForEntity(itemstack, player, entity);
+	}
 
-				Random rand = new Random();
-				for (ItemStack stack : drops)
-				{
-					EntityItem ent = entity.entityDropItem(stack, 1.0F);
-					ent.motionY += rand.nextFloat() * 0.05F;
-					ent.motionX += (rand.nextFloat() - rand.nextFloat()) * 0.1F;
-					ent.motionZ += (rand.nextFloat() - rand.nextFloat()) * 0.1F;
-				}
-			}
-			return true;
-		}
-		return false;
+	@Override
+	public boolean onBlockStartBreak(ItemStack itemstack, int x, int y, int z, EntityPlayer player)
+	{
+		return Items.shears.onBlockStartBreak(itemstack, x, y, z, player);
 	}
 
 	@Override

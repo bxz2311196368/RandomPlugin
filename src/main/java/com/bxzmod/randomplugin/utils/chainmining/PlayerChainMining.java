@@ -15,6 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -71,7 +72,7 @@ public class PlayerChainMining implements IMiningControl
 			boolean faceOffset = ModPlayerData.getDataByPlayer(this.player).isChainMineFaceOffset();
 			int offsetX = faceOffset ? -facing.getFrontOffsetX() : 0, offsetY =
 					faceOffset ? -facing.getFrontOffsetY() : 0, offsetZ = faceOffset ? -facing.getFrontOffsetZ() : 0;
-			int yLimit = this.blockPos.y;
+			int yLimit = MathHelper.floor_double(this.player.posY + 0.125D);
 			while (ChainMiningManager.canChainMiningContinue(this.uuid))
 			{
 				this.findTargetBlock(facing, offsetX, offsetY, offsetZ, yLimit);
@@ -120,13 +121,13 @@ public class PlayerChainMining implements IMiningControl
 				{
 					if (next.y + y < 0 || next.y + y >= 255)
 						continue;
-					if (limitY && next.y < yLimit)
-						continue;
 					for (int z = -1 + offsetZ; z < 2 + offsetZ; z++)
 					{
 						if (x == 0 && y == 0 && z == 0)
 							continue;
 						Point3i temp = Helper.offsetPos(next, x, y, z);
+						if (limitY && temp.y < yLimit)
+							continue;
 						if (!this.skipBlockList.contains(temp))
 						{
 							this.skipBlockList.add(temp);
