@@ -1,0 +1,29 @@
+#PARSE_ESCAPES
+#创造物品栏
+randomplugin.creativetab=随意事物
+
+#物品
+randomplugin.item.ring.name=指环
+randomplugin.item.material_orb.name=物质球
+
+#配置
+config.gui.randomplugin.title=随意事物配置
+config.category.chain_mine.name=连锁采掘配置
+config.category.chain_mine.comment=包含连锁采掘的个性化配置。\n §aOP可以使用/rpset sync来推送本地配置到服务端.
+config.category.chain_mine.property.max_value.name=最大连锁数
+config.category.chain_mine.property.max_value.comment=设定每次连锁采掘时的最大方块挖掘数量
+config.category.chain_mine.property.damage_tool.name=消耗工具耐久
+config.category.chain_mine.property.damage_tool.comment=设定每次连锁采掘时是否按照每方块消耗工具耐久度
+config.category.chain_mine.property.check_tool.name=检查工具
+config.category.chain_mine.property.check_tool.comment=设定每次连锁采掘时是否能空手或使用错误的工具开始
+config.category.chain_mine.property.exhaust.name=消耗玩家饱食度
+config.category.chain_mine.property.exhaust.comment=设定每次连锁采掘时是否按照每方块消耗玩家饱食度
+config.category.chain_mine.property.max_per_tick.name=每Tick最大挖掘数量
+config.category.chain_mine.property.max_per_tick.comment=设定每次连锁采掘时每个TICK允许的方块挖掘数量。\n §c警告：如果设置的太大，连锁采掘会造成服务器卡顿，如果服务器在20 TICk内都没有响应，将自动结束连锁任务。
+
+#信息
+message.chain_mine=面朝玩家挖掘：%s
+
+#快捷键
+randomplugin.key.category=随意事物按键
+randomplugin.key.chain_mine.name=连锁采掘

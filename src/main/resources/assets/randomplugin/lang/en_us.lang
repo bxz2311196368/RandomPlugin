@@ -1,0 +1,29 @@
+#PARSE_ESCAPES
+#craft_tab
+randomplugin.creativetab=Random Plugin
+
+#item
+randomplugin.item.ring.name=ring
+randomplugin.item.material_orb.name=Material Orb
+
+#config
+config.gui.randomplugin.title=Random Plugin Config
+config.category.chain_mine.name=Chain Mining Config
+config.category.chain_mine.comment=Including personalized configuration of chain mining.\n §aOP can use /rpset sync to push the local configuration to server.
+config.category.chain_mine.property.max_value.name=Max Mine Value
+config.category.chain_mine.property.max_value.comment=Set the maximum number of blocks for each chain mining
+config.category.chain_mine.property.damage_tool.name=Damage Tool
+config.category.chain_mine.property.damage_tool.comment=Set whether the durability of tools is consumed per block in each chain mining
+config.category.chain_mine.property.check_tool.name=Check Tool
+config.category.chain_mine.property.check_tool.comment=Set whether the chain mining can be started empty handed or with the wrong tools
+config.category.chain_mine.property.exhaust.name=Exhaust Player
+config.category.chain_mine.property.exhaust.comment=Set whether players' satiety is consumed per block in each chain mining
+config.category.chain_mine.property.max_per_tick.name=Max Mine Per Tick
+config.category.chain_mine.property.max_per_tick.comment=Set the maximum number of blocks allowed for each tick in each chain mining.\n §cWarning: if this setting is too large, the chain mining will cause the server lag. If the server does not respond within 20 tick, the chain task will be automatically ended.
+
+#message
+message.chain_mine=Mine face player:%s
+
+#hotkey
+randomplugin.key.category=Random Plugin HotKey
+randomplugin.key.chain_mine.name=Chain Mining
